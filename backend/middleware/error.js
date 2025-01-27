@@ -1,4 +1,4 @@
-const ErrorHandler = require(" ../utiIs/ErrorHand1er")
+const ErrorHandler = require("../utils/ErrorHandler")
 
 module.exports = (err, req, res, next) => {
     err. statusCode - err.statusCode || 500;
@@ -28,6 +28,6 @@ if (err.name === "TokenExpiredError") {
 
 res. status (err. statusCode). json({
     success: false,
-    message: err. message,
+    message: err.message,
 })
 }
