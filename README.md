@@ -177,3 +177,18 @@ In this milestone, we have added two key backend endpoints to handle cart functi
 # Milestone 19 - Cart Page & Quantity Control
 
 Welcome to Milestone 19 of our project! 🎉 In this milestone, we focused on creating the frontend for the cart page, allowing users to view products and manage quantities directly within the cart. Additionally, we developed backend endpoints to handle increasing and decreasing product quantities.
+
+# Milestone 20 - Profile Page & User Data Endpoint
+Welcome to Milestone 20 of our project! 🎉 In this milestone, we focused on creating the backend endpoint to send all user data via email, as well as building a frontend profile page to display the user data. The profile page shows the user's profile photo, name, email, and addresses. Additionally, we added a button for users to add a new address.
+
+
+# Milestone 21 - Address Input Form
+
+Welcome to Milestone 21 of our project! 🎉 In this milestone, we focused on creating the frontend page for the address input form. Users can now enter their address details, including country, city, address line 1, address line 2, zip code, and address type.
+
+Additionally, we implemented functionality to store the inputted address in a state and navigate to the address form page when the "Add Address" button is clicked in the user profile.
+
+
+# Milestone 22 - Save Address in User Profile
+
+Welcome to Milestone 22 of our project! 🎉 In this milestone, we focused on creating a backend endpoint that allows users to save their address directly into their user profile. We developed the necessary endpoint to receive the address from the frontend and update the user’s profile in the database by adding the address to the user’s address array.
