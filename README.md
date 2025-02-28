@@ -192,3 +192,34 @@ Additionally, we implemented functionality to store the inputted address in a st
 # Milestone 22 - Save Address in User Profile
 
 Welcome to Milestone 22 of our project! 🎉 In this milestone, we focused on creating a backend endpoint that allows users to save their address directly into their user profile. We developed the necessary endpoint to receive the address from the frontend and update the user’s profile in the database by adding the address to the user’s address array.
+
+
+# Milestone 23 🚀  
+
+## Overview  
+In this milestone, we will:  
+- Add a *"Place Order"* button in the cart.  
+- Create a *Select Address* page for choosing a delivery address.  
+- Write a *Mongoose schema* for storing order details.  
+
+## Steps  
+1. Add a *Place Order* button in the cart that navigates to the Select Address page.  
+2. Create a *Select Address* page displaying all saved addresses with a selection option.  
+3. Implement a *backend endpoint* to fetch user addresses.  
+
+### Note  
+This milestone helps in understanding how to implement the *place order* functionality.  
+
+# Milestone 24 🚀  
+
+## Overview  
+In this milestone, we will create an *Order Confirmation* page to display order details.  
+
+## Steps  
+1. Show all *products* being ordered.  
+2. Display the *selected delivery address*.  
+3. Show the *total cart value*.  
+4. Add a *"Place Order"* button at the bottom.  
+
+### Note  
+This milestone helps in understanding how to implement the *place order* functionality.
