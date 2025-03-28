@@ -5,11 +5,12 @@ const User = require("../model/user");
 const router = express.Router();
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
-const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-// const jwt = require("jsonwebtoken");
+const catchAsyncErrors = require("../middleware/catchAsynError");
+const jwt = require("jsonwebtoken");
 // const sendMail = require("../utils/sendMail");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+const { isAuthenticatedUser } = require('../middleware/auth');
 
 router.post(
     "/create-user",
@@ -58,12 +59,27 @@ router.post(
     if (!email || !password) {
         return next(new ErrorHandler("Please provide email and password", 400));
     }
-    const user = await User.findOne({ email }).select("+password");
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET || "your_jwt_secret",
+      { expiresIn: "1h" }
+  );
+
+  // Set token in an HttpOnly cookie
+  res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // use true in production
+      sameSite: "Strict",
+      maxAge: 3600000, // 1 hour
+  });
+
+  user.password = undefined; user = await User.findOne({ email }).select("+password");
     if (!user) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
     const isPasswordMatched = await bcrypt.compare(password, user.password);
-    console.log("At Auth", "Password: ", password, "Hash: ", user.password);
+    // console.log("At Auth", "Password: ", password, "Hash: ", user.password);
     console.log(isPasswordMatched)
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
@@ -75,7 +91,8 @@ router.post(
     });
 }));
 
-router.get("/profile", catchAsyncErrors(async (req, res, next) => {
+
+router.get("/profile", isAuthenticatedUser, catchAsyncErrors(async (req, res, next) => {
   const { email } = req.query;
   if (!email) {
       return next(new ErrorHandler("Please provide an email", 400));
@@ -96,30 +113,34 @@ router.get("/profile", catchAsyncErrors(async (req, res, next) => {
   });
 }));
 
-router.post("/add-address", catchAsyncErrors(async (req, res, next) => {
-  const { country, city, address1, address2, zipCode, addressType, email } = req.body;
+
+router.post("/add-address", isAuthenticatedUser, catchAsyncErrors(async (req, res, next) => {
+  const {country, city, address1, address2, zipCode, addressType, email} = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) {
-      return next(new ErrorHandler("User not found", 404));
+
+  if(!user){
+    return next(new ErrorHandler("User not found", 404));
   }
+
   const newAddress = {
-      country,
-      city,
-      address1,
-      address2,
-      zipCode,
-      addressType,
+    country,
+    city,
+    address1,
+    address2,
+    zipCode, 
+    addressType
   };
+
   user.addresses.push(newAddress);
   await user.save();
   res.status(201).json({
-      success: true,
-      addresses: user.addresses,
+    success: true,
+    addresses: user.addresses,
   });
 }));
 
-router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
+router.get("/addresses", isAuthenticatedUser, catchAsyncErrors(async (req, res, next) => {
   const { email } = req.query;
   if (!email) {
       return next(new ErrorHandler("Please provide an email", 400));
@@ -134,5 +155,6 @@ router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
   });
 }
 ));
+
 
 module.exports = router;
